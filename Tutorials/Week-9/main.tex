@@ -1,0 +1,810 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Tutorial 6}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \section{Tutorial: Actor Critic
+Implementation}\label{tutorial-actor-critic-implementation}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}Import required libraries}
+
+\PY{k+kn}{import} \PY{n+nn}{argparse}
+\PY{k+kn}{import} \PY{n+nn}{gym}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{itertools} \PY{k+kn}{import} \PY{n}{count}
+\PY{k+kn}{from} \PY{n+nn}{collections} \PY{k+kn}{import} \PY{n}{namedtuple}
+
+\PY{k+kn}{import} \PY{n+nn}{torch}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn} \PY{k}{as} \PY{n+nn}{nn}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn}\PY{n+nn}{.}\PY{n+nn}{functional} \PY{k}{as} \PY{n+nn}{F}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{optim} \PY{k}{as} \PY{n+nn}{optim}
+\PY{k+kn}{from} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{distributions} \PY{k+kn}{import} \PY{n}{Categorical}
+
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}Set constants for training}
+\PY{n}{seed} \PY{o}{=} \PY{l+m+mi}{543}
+\PY{n}{log\PYZus{}interval} \PY{o}{=} \PY{l+m+mi}{10}
+\PY{n}{gamma} \PY{o}{=} \PY{l+m+mf}{0.99}
+
+\PY{n}{env} \PY{o}{=} \PY{n}{gym}\PY{o}{.}\PY{n}{make}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CartPole\PYZhy{}v1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{env}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{n}{seed}\PY{o}{=}\PY{n}{seed}\PY{p}{)}
+\PY{n}{torch}\PY{o}{.}\PY{n}{manual\PYZus{}seed}\PY{p}{(}\PY{n}{seed}\PY{p}{)}
+
+\PY{n}{SavedAction} \PY{o}{=} \PY{n}{namedtuple}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SavedAction}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{log\PYZus{}prob}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{env} \PY{o}{=} \PY{n}{gym}\PY{o}{.}\PY{n}{make}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CartPole\PYZhy{}v1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{env}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{n}{seed}\PY{o}{=}\PY{n}{seed}\PY{p}{)}
+\PY{n}{torch}\PY{o}{.}\PY{n}{manual\PYZus{}seed}\PY{p}{(}\PY{n}{seed}\PY{p}{)}
+
+
+\PY{n}{SavedAction} \PY{o}{=} \PY{n}{namedtuple}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SavedAction}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{log\PYZus{}prob}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+
+
+\PY{k}{class} \PY{n+nc}{Policy}\PY{p}{(}\PY{n}{nn}\PY{o}{.}\PY{n}{Module}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    implements both actor and critic in one model}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb}{super}\PY{p}{(}\PY{n}{Policy}\PY{p}{,} \PY{n+nb+bp}{self}\PY{p}{)}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{affine1} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{128}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} actor\PYZsq{}s layer}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{action\PYZus{}head} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{l+m+mi}{128}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} critic\PYZsq{}s layer}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{value\PYZus{}head} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{l+m+mi}{128}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} action \PYZam{} reward buffer}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{saved\PYZus{}actions} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{rewards} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{def} \PY{n+nf}{forward}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{:}
+\PY{+w}{        }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{        forward of both actor and critic}
+\PY{l+s+sd}{        \PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{n}{x} \PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{relu}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{affine1}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} actor: choses action to take from state s\PYZus{}t}
+        \PY{c+c1}{\PYZsh{} by returning probability of each action}
+        \PY{n}{action\PYZus{}prob} \PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{softmax}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{action\PYZus{}head}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{n}{dim}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} critic: evaluates being in the state s\PYZus{}t}
+        \PY{n}{state\PYZus{}values} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{value\PYZus{}head}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} return values for both actor and critic as a tuple of 2 values:}
+        \PY{c+c1}{\PYZsh{} 1. a list with the probability of each action over the action space}
+        \PY{c+c1}{\PYZsh{} 2. the value from state s\PYZus{}t}
+        \PY{k}{return} \PY{n}{action\PYZus{}prob}\PY{p}{,} \PY{n}{state\PYZus{}values}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model} \PY{o}{=} \PY{n}{Policy}\PY{p}{(}\PY{p}{)}
+\PY{n}{optimizer} \PY{o}{=} \PY{n}{optim}\PY{o}{.}\PY{n}{Adam}\PY{p}{(}\PY{n}{model}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{l+m+mf}{3e\PYZhy{}2}\PY{p}{)}
+\PY{n}{eps} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{finfo}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{float32}\PY{p}{)}\PY{o}{.}\PY{n}{eps}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{select\PYZus{}action}\PY{p}{(}\PY{n}{state}\PY{p}{)}\PY{p}{:}
+    \PY{n}{state} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{from\PYZus{}numpy}\PY{p}{(}\PY{n}{state}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}
+    \PY{n}{probs}\PY{p}{,} \PY{n}{state\PYZus{}value} \PY{o}{=} \PY{n}{model}\PY{p}{(}\PY{n}{state}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} create a categorical distribution over the list of probabilities of actions}
+    \PY{n}{m} \PY{o}{=} \PY{n}{Categorical}\PY{p}{(}\PY{n}{probs}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} and sample an action using the distribution}
+    \PY{n}{action} \PY{o}{=} \PY{n}{m}\PY{o}{.}\PY{n}{sample}\PY{p}{(}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} save to action buffer}
+    \PY{n}{model}\PY{o}{.}\PY{n}{saved\PYZus{}actions}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{SavedAction}\PY{p}{(}\PY{n}{m}\PY{o}{.}\PY{n}{log\PYZus{}prob}\PY{p}{(}\PY{n}{action}\PY{p}{)}\PY{p}{,} \PY{n}{state\PYZus{}value}\PY{p}{)}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} the action to take (left or right)}
+    \PY{k}{return} \PY{n}{action}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}
+
+
+\PY{k}{def} \PY{n+nf}{finish\PYZus{}episode}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Training code. Calculates actor and critic loss and performs backprop.}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{R} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{n}{saved\PYZus{}actions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{saved\PYZus{}actions}
+    \PY{n}{policy\PYZus{}losses} \PY{o}{=} \PY{p}{[}\PY{p}{]} \PY{c+c1}{\PYZsh{} list to save actor (policy) loss}
+    \PY{n}{value\PYZus{}losses} \PY{o}{=} \PY{p}{[}\PY{p}{]} \PY{c+c1}{\PYZsh{} list to save critic (value) loss}
+    \PY{n}{returns} \PY{o}{=} \PY{p}{[}\PY{p}{]} \PY{c+c1}{\PYZsh{} list to save the true values}
+
+    \PY{c+c1}{\PYZsh{} calculate the true value using rewards returned from the environment}
+    \PY{k}{for} \PY{n}{r} \PY{o+ow}{in} \PY{n}{model}\PY{o}{.}\PY{n}{rewards}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} calculate the discounted value}
+        \PY{n}{R} \PY{o}{=} \PY{n}{r} \PY{o}{+} \PY{n}{gamma} \PY{o}{*} \PY{n}{R}
+        \PY{n}{returns}\PY{o}{.}\PY{n}{insert}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{R}\PY{p}{)}
+
+    \PY{n}{returns} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{returns}\PY{p}{)}
+    \PY{n}{returns} \PY{o}{=} \PY{p}{(}\PY{n}{returns} \PY{o}{\PYZhy{}} \PY{n}{returns}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{returns}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)} \PY{o}{+} \PY{n}{eps}\PY{p}{)}
+
+    \PY{k}{for} \PY{p}{(}\PY{n}{log\PYZus{}prob}\PY{p}{,} \PY{n}{value}\PY{p}{)}\PY{p}{,} \PY{n}{R} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{saved\PYZus{}actions}\PY{p}{,} \PY{n}{returns}\PY{p}{)}\PY{p}{:}
+        \PY{n}{advantage} \PY{o}{=} \PY{n}{R} \PY{o}{\PYZhy{}} \PY{n}{value}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} calculate actor (policy) loss}
+        \PY{n}{policy\PYZus{}losses}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{log\PYZus{}prob} \PY{o}{*} \PY{n}{advantage}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} calculate critic (value) loss using L1 smooth loss}
+        \PY{n}{value\PYZus{}losses}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{F}\PY{o}{.}\PY{n}{smooth\PYZus{}l1\PYZus{}loss}\PY{p}{(}\PY{n}{value}\PY{p}{,} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{p}{[}\PY{n}{R}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} reset gradients}
+    \PY{n}{optimizer}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} sum up all the values of policy\PYZus{}losses and value\PYZus{}losses}
+    \PY{n}{loss} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{stack}\PY{p}{(}\PY{n}{policy\PYZus{}losses}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)} \PY{o}{+} \PY{n}{torch}\PY{o}{.}\PY{n}{stack}\PY{p}{(}\PY{n}{value\PYZus{}losses}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} perform backprop}
+    \PY{n}{loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+    \PY{n}{optimizer}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} reset rewards and action buffer}
+    \PY{k}{del} \PY{n}{model}\PY{o}{.}\PY{n}{rewards}\PY{p}{[}\PY{p}{:}\PY{p}{]}
+    \PY{k}{del} \PY{n}{model}\PY{o}{.}\PY{n}{saved\PYZus{}actions}\PY{p}{[}\PY{p}{:}\PY{p}{]}
+
+
+\PY{k}{def} \PY{n+nf}{train}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{rewards} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{running\PYZus{}reward} \PY{o}{=} \PY{l+m+mi}{10}
+
+    \PY{c+c1}{\PYZsh{} run infinitely many episodes}
+    \PY{k}{for} \PY{n}{i\PYZus{}episode} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{2000}\PY{p}{)}\PY{p}{:}
+
+        \PY{c+c1}{\PYZsh{} reset environment and episode reward}
+        \PY{n}{state}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{env}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+        \PY{n}{ep\PYZus{}reward} \PY{o}{=} \PY{l+m+mi}{0}
+
+        \PY{c+c1}{\PYZsh{} for each episode, only run 9999 steps so that we don\PYZsq{}t}
+        \PY{c+c1}{\PYZsh{} infinite loop while learning}
+        \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{10000}\PY{p}{)}\PY{p}{:}
+
+            \PY{c+c1}{\PYZsh{} select action from policy}
+            \PY{n}{action} \PY{o}{=} \PY{n}{select\PYZus{}action}\PY{p}{(}\PY{n}{state}\PY{p}{)}
+
+            \PY{c+c1}{\PYZsh{} take the action}
+            \PY{n}{state}\PY{p}{,} \PY{n}{reward}\PY{p}{,} \PY{n}{done}\PY{p}{,} \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{env}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{n}{action}\PY{p}{)}
+
+            \PY{n}{model}\PY{o}{.}\PY{n}{rewards}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{reward}\PY{p}{)}
+            \PY{n}{ep\PYZus{}reward} \PY{o}{+}\PY{o}{=} \PY{n}{reward}
+            \PY{k}{if} \PY{n}{done}\PY{p}{:}
+                \PY{k}{break}
+
+        \PY{c+c1}{\PYZsh{} update cumulative reward}
+        \PY{n}{running\PYZus{}reward} \PY{o}{=} \PY{l+m+mf}{0.05} \PY{o}{*} \PY{n}{ep\PYZus{}reward} \PY{o}{+} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{l+m+mf}{0.05}\PY{p}{)} \PY{o}{*} \PY{n}{running\PYZus{}reward}
+        \PY{n}{rewards}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{running\PYZus{}reward}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} perform backprop}
+        \PY{n}{finish\PYZus{}episode}\PY{p}{(}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} log results}
+        \PY{k}{if} \PY{n}{i\PYZus{}episode} \PY{o}{\PYZpc{}} \PY{n}{log\PYZus{}interval} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Episode }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{Last reward: }\PY{l+s+si}{\PYZob{}:.2f\PYZcb{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{Average reward: }\PY{l+s+si}{\PYZob{}:.2f\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}
+                  \PY{n}{i\PYZus{}episode}\PY{p}{,} \PY{n}{ep\PYZus{}reward}\PY{p}{,} \PY{n}{running\PYZus{}reward}\PY{p}{)}\PY{p}{)}
+
+		\PY{c+c1}{\PYZsh{} check if we have \PYZdq{}solved\PYZdq{} the cart pole problem}
+        \PY{k}{if} \PY{n}{running\PYZus{}reward} \PY{o}{\PYZgt{}} \PY{n}{env}\PY{o}{.}\PY{n}{spec}\PY{o}{.}\PY{n}{reward\PYZus{}threshold}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Solved! Running reward is now }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{ and }\PY{l+s+s2}{\PYZdq{}}
+                  \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{the last episode runs to }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{ time steps!}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{running\PYZus{}reward}\PY{p}{,} \PY{n}{t}\PY{p}{)}\PY{p}{)}
+            \PY{k}{break}
+    \PY{k}{return} \PY{n}{rewards}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{plot}\PY{p}{(}\PY{n}{shared\PYZus{}rewards}\PY{p}{,} \PY{n}{unshared\PYZus{}rewards}\PY{p}{,} \PY{n}{threshold}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Plot the results of shared and unshared architectures with a horizontal threshold line.}
+
+\PY{l+s+sd}{    Args:}
+\PY{l+s+sd}{        shared\PYZus{}rewards (list): List of average rewards for shared architecture.}
+\PY{l+s+sd}{        unshared\PYZus{}rewards (list): List of average rewards for unshared architecture.}
+\PY{l+s+sd}{        threshold (float): Threshold value for the horizontal line.}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{c+c1}{\PYZsh{} Plotting}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{shared\PYZus{}rewards}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Shared Architecture}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{unshared\PYZus{}rewards}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Unshared Architecture}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{axhline}\PY{p}{(}\PY{n}{y}\PY{o}{=}\PY{n}{threshold}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Threshold}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Comparison of Shared vs. Unshared Architectures}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Episode}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Average Reward}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{shared\PYZus{}rewards} \PY{o}{=} \PY{n}{train}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/opt/miniconda3/envs/torch/lib/python3.8/site-
+packages/gym/utils/passive\_env\_checker.py:233: DeprecationWarning: `np.bool8` is
+a deprecated alias for `np.bool\_`.  (Deprecated NumPy 1.24)
+  if not isinstance(terminated, (bool, np.bool8)):
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Episode 0       Last reward: 35.00      Average reward: 11.25
+Episode 10      Last reward: 11.00      Average reward: 10.84
+Episode 20      Last reward: 10.00      Average reward: 10.33
+Episode 30      Last reward: 10.00      Average reward: 10.06
+Episode 40      Last reward: 10.00      Average reward: 9.79
+Episode 50      Last reward: 10.00      Average reward: 9.59
+Episode 60      Last reward: 8.00       Average reward: 9.56
+Episode 70      Last reward: 9.00       Average reward: 9.44
+Episode 80      Last reward: 11.00      Average reward: 9.65
+Episode 90      Last reward: 11.00      Average reward: 9.49
+Episode 100     Last reward: 10.00      Average reward: 9.58
+Episode 110     Last reward: 9.00       Average reward: 9.51
+Episode 120     Last reward: 9.00       Average reward: 9.50
+Episode 130     Last reward: 11.00      Average reward: 9.45
+Episode 140     Last reward: 9.00       Average reward: 10.21
+Episode 150     Last reward: 18.00      Average reward: 23.84
+Episode 160     Last reward: 62.00      Average reward: 45.89
+Episode 170     Last reward: 35.00      Average reward: 39.74
+Episode 180     Last reward: 72.00      Average reward: 57.18
+Episode 190     Last reward: 42.00      Average reward: 60.63
+Episode 200     Last reward: 270.00     Average reward: 68.62
+Episode 210     Last reward: 19.00      Average reward: 86.29
+Episode 220     Last reward: 20.00      Average reward: 62.44
+Episode 230     Last reward: 28.00      Average reward: 50.23
+Episode 240     Last reward: 70.00      Average reward: 61.97
+Episode 250     Last reward: 73.00      Average reward: 66.60
+Episode 260     Last reward: 123.00     Average reward: 77.98
+Episode 270     Last reward: 74.00      Average reward: 107.29
+Episode 280     Last reward: 101.00     Average reward: 139.53
+Episode 290     Last reward: 133.00     Average reward: 140.83
+Episode 300     Last reward: 257.00     Average reward: 145.04
+Episode 310     Last reward: 196.00     Average reward: 181.36
+Episode 320     Last reward: 284.00     Average reward: 209.24
+Episode 330     Last reward: 129.00     Average reward: 328.66
+Episode 340     Last reward: 239.00     Average reward: 264.53
+Episode 350     Last reward: 180.00     Average reward: 257.65
+Episode 360     Last reward: 219.00     Average reward: 234.69
+Solved! Running reward is now 921.6914894386209 and the last episode runs to
+9999 time steps!
+    \end{Verbatim}
+\newpage
+    \section{TODO: Write a policy class similar to the above, without using
+shared features for the actor and critic and compare their
+performance.}\label{todo-write-a-policy-class-similar-to-the-above-without-using-shared-features-for-the-actor-and-critic-and-compare-their-performance.}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}TODO: Write a policy class similar to the above, without using shared features for the actor and critic and compare their}
+\PY{c+c1}{\PYZsh{} performance.}
+
+\PY{k}{class} \PY{n+nc}{UnsharedPolicy}\PY{p}{(}\PY{n}{nn}\PY{o}{.}\PY{n}{Module}\PY{p}{)}\PY{p}{:}
+	\PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:}
+		\PY{n+nb}{super}\PY{p}{(}\PY{n}{UnsharedPolicy}\PY{p}{,} \PY{n+nb+bp}{self}\PY{p}{)}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{p}{)}
+		\PY{c+c1}{\PYZsh{}TODO: Fill in.}
+		\PY{c+c1}{\PYZsh{} Actor network layers}
+		\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}fc1} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{128}\PY{p}{)}
+		\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}fc2} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{l+m+mi}{128}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 2 actions in CartPole\PYZhy{}v1}
+
+		\PY{c+c1}{\PYZsh{} Critic network layers}
+		\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}fc1} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{128}\PY{p}{)}
+		\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}fc2} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{l+m+mi}{128}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+
+		\PY{c+c1}{\PYZsh{} Action \PYZam{} reward buffer}
+		\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{saved\PYZus{}actions} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+		\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{rewards} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+	\PY{k}{def} \PY{n+nf}{forward}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{:}
+		\PY{c+c1}{\PYZsh{} TODO: Fill in. For your networks, use the same hidden\PYZus{}size for the layers as the previous policy, that is 128.}
+		\PY{c+c1}{\PYZsh{} Actor network}
+		\PY{n}{actor\PYZus{}x} \PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{relu}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}fc1}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+		\PY{n}{action\PYZus{}probs} \PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{softmax}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}fc2}\PY{p}{(}\PY{n}{actor\PYZus{}x}\PY{p}{)}\PY{p}{,} \PY{n}{dim}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+
+		\PY{c+c1}{\PYZsh{} Critic network}
+		\PY{n}{critic\PYZus{}x} \PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{relu}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}fc1}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+		\PY{n}{state\PYZus{}value} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}fc2}\PY{p}{(}\PY{n}{critic\PYZus{}x}\PY{p}{)}
+
+		\PY{c+c1}{\PYZsh{} return values for both actor and critic as a tuple of 2 values:}
+		\PY{c+c1}{\PYZsh{} 1. a list with the probability of each action over the action space}
+		\PY{c+c1}{\PYZsh{} 2. the value from state s\PYZus{}t}
+		\PY{k}{return} \PY{n}{action\PYZus{}probs}\PY{p}{,} \PY{n}{state\PYZus{}value}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model} \PY{o}{=} \PY{n}{UnsharedPolicy}\PY{p}{(}\PY{p}{)}
+\PY{n}{optimizer} \PY{o}{=} \PY{n}{optim}\PY{o}{.}\PY{n}{Adam}\PY{p}{(}\PY{n}{model}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{l+m+mf}{3e\PYZhy{}2}\PY{p}{)}
+\PY{n}{eps} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{finfo}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{float32}\PY{p}{)}\PY{o}{.}\PY{n}{eps}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}
+\PY{n}{unshared\PYZus{}rewards} \PY{o}{=} \PY{n}{train}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Episode 0       Last reward: 24.00      Average reward: 10.70
+Episode 10      Last reward: 24.00      Average reward: 19.47
+Episode 20      Last reward: 35.00      Average reward: 23.33
+Episode 30      Last reward: 36.00      Average reward: 29.98
+Episode 40      Last reward: 33.00      Average reward: 38.66
+Episode 50      Last reward: 24.00      Average reward: 39.87
+Episode 60      Last reward: 34.00      Average reward: 35.00
+Episode 70      Last reward: 51.00      Average reward: 37.74
+Episode 80      Last reward: 130.00     Average reward: 61.41
+Episode 90      Last reward: 192.00     Average reward: 86.55
+Solved! Running reward is now 633.6832365471276 and the last episode runs to
+9999 time steps!
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Plot results}
+\PY{n}{plot}\PY{p}{(}\PY{n}{shared\PYZus{}rewards}\PY{p}{,} \PY{n}{unshared\PYZus{}rewards}\PY{p}{,} \PY{n}{env}\PY{o}{.}\PY{n}{spec}\PY{o}{.}\PY{n}{reward\PYZus{}threshold}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{actor-critic.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+
+\newpage
+\begin{center}
+    \textbf{ \Large Comparision between the performance of shared and unshared networks in Actor-Critic Method}
+\end{center}
+
+\textbf{Implementation:} Each of the policy classes concerning a shared and an unshared network in the Actor-Critic Method is implemented for CartPole-v1. A brief overview regarding the network has been provided followingly.
+\begin{enumerate}
+    \item \textit{Shared Network: }For the shared architecture, a fully connected network of size \(4\) (Input Layer) \(\times 128\) (Hidden Layer) \(\times\) \(3\) (Output Layer) is used, where 2 of the 3 neurons in the output layer are represented for the actor and the remaining one is used for the critic.
+    \item \textit{Unshared Network: }Two analogous fully connected networks, one of size \(4\) (Input Layer) \(\times 128\) (Hidden Layer) \(\times\) \(2\) (Output Layer) and the other of size \(4\) (Input Layer) \(\times 128\) (Hidden Layer) \(\times\) \(1\) (Output Layer) is used to represent the actor and the critic respectively.
+\end{enumerate}
+
+\textbf{Observations and Inferences: }Some observations are made concerning the learning in both paradigms and based on them the following inferences are drawn. 
+
+\begin{enumerate}
+    \item \textit{Convergence Speed:} The unshared network appears to converge faster, as indicated by the shorter time to achieve a "solved" state. The shared network achieves a running reward of 921.69 after 360 episodes, while the unshared network achieves a running reward of 633.68 after only 90 episodes. This suggests that the unshared network learns more efficiently and reaches a satisfactory performance level in fewer episodes.
+
+    \item \textit{Average Reward Trajectories:} Analyzing the average reward trajectories over episodes, it's observed that the unshared network generally maintains a smoother progression compared to the shared network. The average reward in the unshared network steadily increases over episodes, reflecting consistent improvement in performance. In contrast, the average reward in the shared network exhibits more fluctuations, with periods of stagnation followed by sudden spikes in performance. This indicates that the learning process in the unshared network is more stable and reliable.
+
+    \item \textit{Final Performance:} Despite the faster convergence of the unshared network, both networks achieve high levels of performance by the end of training. The shared network reaches a running reward of 921.69, while the unshared network reaches a slightly lower running reward of 633.68. Although the unshared network converges faster, the shared network ultimately achieves a higher level of performance. This suggests that the shared architecture may have certain advantages in terms of final performance, even though it may take longer to converge.
+
+    \item \textit{Sensitivity to Architecture:} The results highlight the sensitivity of the reinforcement learning process to the choice of architecture. Despite using similar network sizes and training procedures, the shared and unshared architectures exhibit distinct learning dynamics and performance trajectories. This underscores the importance of carefully selecting and designing the neural network architecture for reinforcement learning tasks to achieve optimal performance.
+\end{enumerate}
+
+Overall, while the unshared network demonstrates faster convergence and smoother learning dynamics, the shared network ultimately achieves higher levels of performance in this specific case. These findings emphasize the trade-offs and considerations involved in choosing between shared and unshared architectures for actor-critic reinforcement learning tasks. Followingly we mention some general overview of the architectures that might be the reason for this behaviour.
+\begin{enumerate}
+    \item \textit{Parameter Separation:} In unshared networks, the parameters of the actor and critic are completely separate, allowing each network to specialize in its respective task without interference from the other. This separation may lead to more efficient learning as each network can focus exclusively on optimizing its objective.
+    \item \textit{Reduced Interference:} Shared networks require coordination between the actor and critic during training, as updates to one network may affect the other. This interdependence can introduce additional complexities and potential conflicts during training, leading to slower convergence.
+    \item \textit{Gradient Interference:} In shared networks, updates to one set of parameters can inadvertently impact the gradients used to update the other set of parameters. This phenomenon, known as gradient interference or catastrophic forgetting, can hinder convergence by introducing noise or conflicting signals into the training process.
+    \item \textit{Exploration Strategies:} Unshared networks may enable more effective exploration strategies by allowing the actor to explore independently of the critic's evaluations. This autonomy in exploration can lead to better discovery of optimal policies and higher rewards.
+    \item \textit{Capacity Allocation:} Note that we allocate 2 neurons for Actor while 1 neuron for the critic. Shared networks need to allocate capacity to represent both the policy and value function within the same architecture. This shared capacity allocation may result in a suboptimal representation of either the actor or critic, hindering learning efficiency and performance.
+\end{enumerate}
+In summary, the differences in architecture, particularly regarding parameter sharing, capacity allocation, and gradient interference, likely contribute to the observed behaviour of faster convergence in the unshared network compared to the shared network. These architectural choices influence the learning dynamics and efficiency of the actor-critic method, ultimately affecting the rate of convergence and the performance of the learning agent.
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}

@@ -1,0 +1,1274 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{\sc{CS6700: Reinforcement Learning\\ Spring 2024 Offering\\ Tutorial 7 \\[5pt]\vspace{0.5cm}\hrule}}
+    \author{\sc{ME20B087 Janmenjaya Panda}}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{gym}
+\PY{k+kn}{from} \PY{n+nn}{collections} \PY{k+kn}{import} \PY{n}{deque}
+\PY{k+kn}{import} \PY{n+nn}{random}
+\PY{k+kn}{import} \PY{n+nn}{warnings}
+
+\PY{c+c1}{\PYZsh{} Filter out DeprecationWarnings and UserWarnings}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{UserWarning}\PY{p}{)}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{RuntimeWarning}\PY{p}{)}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{DeprecationWarning}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Ornstein\PYZhy{}Ulhenbeck Process}
+\PY{c+c1}{\PYZsh{} Taken from \PYZsh{}https://github.com/vitchyr/rlkit/blob/master/rlkit/exploration\PYZus{}strategies/ou\PYZus{}strategy.py}
+\PY{k}{class} \PY{n+nc}{OUNoise}\PY{p}{(}\PY{n+nb}{object}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{action\PYZus{}space}\PY{p}{,} \PY{n}{mu}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,} \PY{n}{theta}\PY{o}{=}\PY{l+m+mf}{0.15}\PY{p}{,} \PY{n}{max\PYZus{}sigma}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{,} \PY{n}{min\PYZus{}sigma}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{,} \PY{n}{decay\PYZus{}period}\PY{o}{=}\PY{l+m+mi}{100000}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{mu}           \PY{o}{=} \PY{n}{mu}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{theta}        \PY{o}{=} \PY{n}{theta}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sigma}        \PY{o}{=} \PY{n}{max\PYZus{}sigma}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{max\PYZus{}sigma}    \PY{o}{=} \PY{n}{max\PYZus{}sigma}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{min\PYZus{}sigma}    \PY{o}{=} \PY{n}{min\PYZus{}sigma}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{decay\PYZus{}period} \PY{o}{=} \PY{n}{decay\PYZus{}period}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{action\PYZus{}dim}   \PY{o}{=} \PY{n}{action\PYZus{}space}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{low}          \PY{o}{=} \PY{n}{action\PYZus{}space}\PY{o}{.}\PY{n}{low}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{high}         \PY{o}{=} \PY{n}{action\PYZus{}space}\PY{o}{.}\PY{n}{high}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{reset}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{state} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{ones}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{action\PYZus{}dim}\PY{p}{)} \PY{o}{*} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{mu}
+
+    \PY{k}{def} \PY{n+nf}{evolve\PYZus{}state}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:}
+        \PY{n}{x}  \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{state}
+        \PY{n}{dx} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{theta} \PY{o}{*} \PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{mu} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{)} \PY{o}{+} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sigma} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{action\PYZus{}dim}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{state} \PY{o}{=} \PY{n}{x} \PY{o}{+} \PY{n}{dx}
+        \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{state}
+
+    \PY{k}{def} \PY{n+nf}{get\PYZus{}action}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{action}\PY{p}{,} \PY{n}{t}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+        \PY{n}{ou\PYZus{}state} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{evolve\PYZus{}state}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sigma} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{max\PYZus{}sigma} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{max\PYZus{}sigma} \PY{o}{\PYZhy{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{min\PYZus{}sigma}\PY{p}{)} \PY{o}{*} \PY{n+nb}{min}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{p}{,} \PY{n}{t} \PY{o}{/} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{decay\PYZus{}period}\PY{p}{)}
+        \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{clip}\PY{p}{(}\PY{n}{action} \PY{o}{+} \PY{n}{ou\PYZus{}state}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{low}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{high}\PY{p}{)}
+
+
+\PY{c+c1}{\PYZsh{} https://github.com/openai/gym/blob/master/gym/core.py}
+\PY{k}{class} \PY{n+nc}{NormalizedEnv}\PY{p}{(}\PY{n}{gym}\PY{o}{.}\PY{n}{ActionWrapper}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{} Wrap action \PYZdq{}\PYZdq{}\PYZdq{}}
+
+    \PY{k}{def} \PY{n+nf}{action}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{action}\PY{p}{)}\PY{p}{:}
+        \PY{n}{act\PYZus{}k} \PY{o}{=} \PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{action\PYZus{}space}\PY{o}{.}\PY{n}{high} \PY{o}{\PYZhy{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{action\PYZus{}space}\PY{o}{.}\PY{n}{low}\PY{p}{)}\PY{o}{/} \PY{l+m+mf}{2.}
+        \PY{n}{act\PYZus{}b} \PY{o}{=} \PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{action\PYZus{}space}\PY{o}{.}\PY{n}{high} \PY{o}{+} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{action\PYZus{}space}\PY{o}{.}\PY{n}{low}\PY{p}{)}\PY{o}{/} \PY{l+m+mf}{2.}
+        \PY{k}{return} \PY{n}{act\PYZus{}k} \PY{o}{*} \PY{n}{action} \PY{o}{+} \PY{n}{act\PYZus{}b}
+
+
+
+\PY{k}{class} \PY{n+nc}{Memory}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{max\PYZus{}size}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{max\PYZus{}size} \PY{o}{=} \PY{n}{max\PYZus{}size}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{buffer} \PY{o}{=} \PY{n}{deque}\PY{p}{(}\PY{n}{maxlen}\PY{o}{=}\PY{n}{max\PYZus{}size}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{push}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{state}\PY{p}{,} \PY{n}{action}\PY{p}{,} \PY{n}{reward}\PY{p}{,} \PY{n}{next\PYZus{}state}\PY{p}{,} \PY{n}{done}\PY{p}{)}\PY{p}{:}
+        \PY{n}{experience} \PY{o}{=} \PY{p}{(}\PY{n}{state}\PY{p}{,} \PY{n}{action}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{reward}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{next\PYZus{}state}\PY{p}{,} \PY{n}{done}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{buffer}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{experience}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{sample}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{p}{)}\PY{p}{:}
+        \PY{n}{state\PYZus{}batch} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n}{action\PYZus{}batch} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n}{reward\PYZus{}batch} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n}{next\PYZus{}state\PYZus{}batch} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n}{done\PYZus{}batch} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+        \PY{n}{batch} \PY{o}{=} \PY{n}{random}\PY{o}{.}\PY{n}{sample}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{buffer}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{p}{)}
+
+        \PY{k}{for} \PY{n}{experience} \PY{o+ow}{in} \PY{n}{batch}\PY{p}{:}
+            \PY{n}{state}\PY{p}{,} \PY{n}{action}\PY{p}{,} \PY{n}{reward}\PY{p}{,} \PY{n}{next\PYZus{}state}\PY{p}{,} \PY{n}{done} \PY{o}{=} \PY{n}{experience}
+            \PY{n}{state\PYZus{}batch}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{state}\PY{p}{)}
+            \PY{n}{action\PYZus{}batch}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{action}\PY{p}{)}
+            \PY{n}{reward\PYZus{}batch}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{reward}\PY{p}{)}
+            \PY{n}{next\PYZus{}state\PYZus{}batch}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{next\PYZus{}state}\PY{p}{)}
+            \PY{n}{done\PYZus{}batch}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{done}\PY{p}{)}
+
+        \PY{k}{return} \PY{n}{state\PYZus{}batch}\PY{p}{,} \PY{n}{action\PYZus{}batch}\PY{p}{,} \PY{n}{reward\PYZus{}batch}\PY{p}{,} \PY{n}{next\PYZus{}state\PYZus{}batch}\PY{p}{,} \PY{n}{done\PYZus{}batch}
+
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}len\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n+nb}{len}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{buffer}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \textbf{Networks:} DDPG uses four neural networks: 
+\begin{enumerate}
+    \item a Q network 
+    \item a deterministic policy network
+    \item a target Q network, and 
+    \item a target policy network.
+\end{enumerate}
+
+\textbf{Parameters:} 
+\begin{enumerate}
+    \item \(\theta^Q\): \(Q\) Network 
+    \item \(\theta^\mu\): Deterministic Policy Function 
+    \item \(\theta^{Q'}\): Target \(Q\) Network 
+    \item \(\theta^{\mu'}\): Target Policy Function
+\end{enumerate}
+The Q network and policy network is very much like simple Advantage
+Actor-Critic, but in DDPG, the Actor directly maps states to actions
+(the output of the network directly the output) instead of outputting
+the probability distribution across a discrete action space.
+
+The target networks are time-delayed copies of their original networks
+that slowly track the learned networks. Using these target value
+networks greatly improves stability in learning.
+
+Let's create these networks.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{torch}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn} \PY{k}{as} \PY{n+nn}{nn}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn}\PY{n+nn}{.}\PY{n+nn}{functional} \PY{k}{as} \PY{n+nn}{F}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{autograd}
+\PY{k+kn}{from} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{autograd} \PY{k+kn}{import} \PY{n}{Variable}
+\PY{k+kn}{import} \PY{n+nn}{warnings}
+
+\PY{c+c1}{\PYZsh{} Filter out DeprecationWarnings and UserWarnings}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{UserWarning}\PY{p}{)}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{RuntimeWarning}\PY{p}{)}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{DeprecationWarning}\PY{p}{)}
+
+\PY{k}{class} \PY{n+nc}{Critic}\PY{p}{(}\PY{n}{nn}\PY{o}{.}\PY{n}{Module}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{input\PYZus{}size}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{p}{,} \PY{n}{output\PYZus{}size}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb}{super}\PY{p}{(}\PY{n}{Critic}\PY{p}{,} \PY{n+nb+bp}{self}\PY{p}{)}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear1} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{input\PYZus{}size}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear2} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{hidden\PYZus{}size}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear3} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{hidden\PYZus{}size}\PY{p}{,} \PY{n}{output\PYZus{}size}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{forward}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{state}\PY{p}{,} \PY{n}{action}\PY{p}{)}\PY{p}{:}
+\PY{+w}{        }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{        Params state and actions are torch tensors}
+\PY{l+s+sd}{        \PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{n}{x} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{cat}\PY{p}{(}\PY{p}{[}\PY{n}{state}\PY{p}{,} \PY{n}{action}\PY{p}{]}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{relu}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear1}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{relu}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear2}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear3}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+
+        \PY{k}{return} \PY{n}{x}
+
+\PY{k}{class} \PY{n+nc}{Actor}\PY{p}{(}\PY{n}{nn}\PY{o}{.}\PY{n}{Module}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{input\PYZus{}size}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{p}{,} \PY{n}{output\PYZus{}size}\PY{p}{,} \PY{n}{learning\PYZus{}rate} \PY{o}{=} \PY{l+m+mf}{3e\PYZhy{}4}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb}{super}\PY{p}{(}\PY{n}{Actor}\PY{p}{,} \PY{n+nb+bp}{self}\PY{p}{)}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear1} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{input\PYZus{}size}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear2} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{hidden\PYZus{}size}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear3} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{hidden\PYZus{}size}\PY{p}{,} \PY{n}{output\PYZus{}size}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{forward}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{state}\PY{p}{)}\PY{p}{:}
+\PY{+w}{        }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{        Param state is a torch tensor}
+\PY{l+s+sd}{        \PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{n}{x} \PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{relu}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear1}\PY{p}{(}\PY{n}{state}\PY{p}{)}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{relu}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear2}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tanh}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear3}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+
+        \PY{k}{return} \PY{n}{x}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Now, let's create the DDPG agent. The agent class has two main
+functions: ``get\_action'' and ``update'':
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{get\_action()}: This function runs a forward pass through the
+  actor network to select a determinisitic action. In the DDPG paper,
+  the authors use Ornstein-Uhlenbeck Process to add noise to the action
+  output (Uhlenbeck \& Ornstein, 1930), thereby resulting in exploration
+  in the environment. Class OUNoise (in cell 1) implements this.
+\end{enumerate}
+
+\[\mu'(s_t) = \mu(s_t \vert \theta_t^\mu) + \mathcal{N}\]
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{update()}: This function is used for updating the actor and
+  critic networks, and forms the core of the DDPG algorithm. The replay
+  buffer is first sampled to get a batch of experiences of the form
+  \textbf{\textless{}states, actions, rewards,
+  next\_states\textgreater{}}.
+\end{enumerate}
+
+The value network is updated similarly as is done in Q-learning. The
+updated Q value is obtained by the Bellman equation. However, in DDPG,
+the next-state Q values are calculated with the target value network and
+target policy network. Then, we minimize the mean-squared loss between
+the updated Q value and the original Q value:
+
+\[u_i = r_i + \gamma Q'(s_{i+1}, \mu'\left(s_{i+1}|\theta^{\mu'}\right))\]
+\[Loss = \dfrac{1}{N}\sum\limits_{i}\left(y_i - Q(s_i, a_i \vert \theta^Q)\right)^2\]
+
+For the policy function, our objective is to maximize the expected
+return. To calculate the policy loss, we take the derivative of the
+objective function with respect to the policy parameter. Keep in mind
+that the actor (policy) function is differentiable, so we have to apply
+the chain rule.
+
+But since we are updating the policy in an off-policy way with batches
+of experience, we take the mean of the sum of gradients calculated from
+the mini-batch:
+
+\[\nabla_{\theta^\mu}J(\theta) \approx \dfrac{1}{N}\sum\limits_{i}\left[\nabla_aQ(s,a\vert \theta^Q)\vert_{s=s_i, a=\mu(s_i)}\nabla_{\theta^\mu}\mu(s\vert \theta^\mu)\vert_{s=s_i}\right]\]
+
+We make a copy of the target network parameters and have them slowly
+track those of the learned networks via ``soft updates,'' as illustrated
+below:
+
+\[\theta^{Q'} \leftarrow \tau\theta^Q + (1 - \tau)\theta^{Q'}\]
+\[\theta^{\mu'} \leftarrow \tau\theta^\mu + (1 - \tau)\theta^{\mu'}\]
+where \(\tau \ll 1\).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{torch}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{autograd}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{optim} \PY{k}{as} \PY{n+nn}{optim}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn} \PY{k}{as} \PY{n+nn}{nn}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn}\PY{n+nn}{.}\PY{n+nn}{functional} \PY{k}{as} \PY{n+nn}{F}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{autograd}
+\PY{k+kn}{from} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{autograd} \PY{k+kn}{import} \PY{n}{Variable}
+\PY{c+c1}{\PYZsh{} from model import *}
+\PY{c+c1}{\PYZsh{} from utils import *}
+\PY{k+kn}{import} \PY{n+nn}{warnings}
+
+\PY{c+c1}{\PYZsh{} Filter out DeprecationWarnings and UserWarnings}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{UserWarning}\PY{p}{)}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{RuntimeWarning}\PY{p}{)}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{DeprecationWarning}\PY{p}{)}
+
+\PY{k}{class} \PY{n+nc}{DDPGagent}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{env}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{256}\PY{p}{,} \PY{n}{actor\PYZus{}learning\PYZus{}rate}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}4}\PY{p}{,} \PY{n}{critic\PYZus{}learning\PYZus{}rate}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}3}\PY{p}{,} \PY{n}{gamma}\PY{o}{=}\PY{l+m+mf}{0.99}\PY{p}{,} \PY{n}{tau}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}2}\PY{p}{,} \PY{n}{max\PYZus{}memory\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{50000}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} Params}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}states} \PY{o}{=} \PY{n}{env}\PY{o}{.}\PY{n}{observation\PYZus{}space}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}actions} \PY{o}{=} \PY{n}{env}\PY{o}{.}\PY{n}{action\PYZus{}space}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{gamma} \PY{o}{=} \PY{n}{gamma}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tau} \PY{o}{=} \PY{n}{tau}
+
+        \PY{c+c1}{\PYZsh{} Networks}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor} \PY{o}{=} \PY{n}{Actor}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}states}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}actions}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}target} \PY{o}{=} \PY{n}{Actor}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}states}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}actions}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic} \PY{o}{=} \PY{n}{Critic}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}states} \PY{o}{+} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}actions}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}actions}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}target} \PY{o}{=} \PY{n}{Critic}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}states} \PY{o}{+} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}actions}\PY{p}{,} \PY{n}{hidden\PYZus{}size}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}actions}\PY{p}{)}
+
+        \PY{k}{for} \PY{n}{target\PYZus{}param}\PY{p}{,} \PY{n}{param} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}target}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n}{target\PYZus{}param}\PY{o}{.}\PY{n}{data}\PY{o}{.}\PY{n}{copy\PYZus{}}\PY{p}{(}\PY{n}{param}\PY{o}{.}\PY{n}{data}\PY{p}{)}
+            \PY{n}{target\PYZus{}param}\PY{o}{.}\PY{n}{requires\PYZus{}grad} \PY{o}{=} \PY{k+kc}{False}
+
+        \PY{k}{for} \PY{n}{target\PYZus{}param}\PY{p}{,} \PY{n}{param} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}target}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n}{target\PYZus{}param}\PY{o}{.}\PY{n}{data}\PY{o}{.}\PY{n}{copy\PYZus{}}\PY{p}{(}\PY{n}{param}\PY{o}{.}\PY{n}{data}\PY{p}{)}
+            \PY{n}{target\PYZus{}param}\PY{o}{.}\PY{n}{requires\PYZus{}grad} \PY{o}{=} \PY{k+kc}{False}
+
+        \PY{c+c1}{\PYZsh{} Training}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{memory} \PY{o}{=} \PY{n}{Memory}\PY{p}{(}\PY{n}{max\PYZus{}memory\PYZus{}size}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}criterion}  \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{MSELoss}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}optimizer}  \PY{o}{=} \PY{n}{optim}\PY{o}{.}\PY{n}{Adam}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{n}{actor\PYZus{}learning\PYZus{}rate}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}optimizer} \PY{o}{=} \PY{n}{optim}\PY{o}{.}\PY{n}{Adam}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{n}{critic\PYZus{}learning\PYZus{}rate}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{get\PYZus{}action}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{state}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n+nb}{isinstance}\PY{p}{(}\PY{n}{state}\PY{p}{,} \PY{n+nb}{tuple}\PY{p}{)}\PY{p}{:}
+            \PY{n}{state} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{state}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+        \PY{n}{state} \PY{o}{=} \PY{n}{Variable}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{from\PYZus{}numpy}\PY{p}{(}\PY{n}{state}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{unsqueeze}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+        \PY{n}{action} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor}\PY{o}{.}\PY{n}{forward}\PY{p}{(}\PY{n}{state}\PY{p}{)}
+        \PY{n}{action} \PY{o}{=} \PY{n}{action}\PY{o}{.}\PY{n}{detach}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{k}{return} \PY{n}{action}
+
+    \PY{k}{def} \PY{n+nf}{update}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{p}{)}\PY{p}{:}
+        \PY{n}{states}\PY{p}{,} \PY{n}{actions}\PY{p}{,} \PY{n}{rewards}\PY{p}{,} \PY{n}{next\PYZus{}states}\PY{p}{,} \PY{n}{done} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{memory}\PY{o}{.}\PY{n}{sample}\PY{p}{(}\PY{n}{batch\PYZus{}size}\PY{p}{)}
+        \PY{n}{states} \PY{o}{=} \PY{p}{[}\PY{n}{state}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{k}{if} \PY{n+nb}{isinstance}\PY{p}{(}\PY{n}{state}\PY{p}{,} \PY{n+nb}{tuple}\PY{p}{)} \PY{k}{else} \PY{n}{state} \PY{k}{for} \PY{n}{state} \PY{o+ow}{in} \PY{n}{states}\PY{p}{]}
+        \PY{n}{states} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{FloatTensor}\PY{p}{(}\PY{n}{states}\PY{p}{)}
+        \PY{n}{actions} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{FloatTensor}\PY{p}{(}\PY{n}{actions}\PY{p}{)}
+        \PY{n}{rewards} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{FloatTensor}\PY{p}{(}\PY{n}{rewards}\PY{p}{)}
+        \PY{n}{next\PYZus{}states} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{FloatTensor}\PY{p}{(}\PY{n}{next\PYZus{}states}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Compute target values for critic loss}
+        \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{n}{target\PYZus{}actions} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}target}\PY{p}{(}\PY{n}{next\PYZus{}states}\PY{p}{)}
+            \PY{n}{critic\PYZus{}value\PYZus{}} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}target}\PY{p}{(}\PY{n}{next\PYZus{}states}\PY{p}{,} \PY{n}{target\PYZus{}actions}\PY{p}{)}
+            \PY{n}{target} \PY{o}{=} \PY{n}{rewards} \PY{o}{+} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{gamma} \PY{o}{*} \PY{n}{critic\PYZus{}value\PYZus{}} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{torch}\PY{o}{.}\PY{n}{FloatTensor}\PY{p}{(}\PY{n}{done}\PY{p}{)}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Compute critic loss}
+        \PY{n}{critic\PYZus{}value} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic}\PY{p}{(}\PY{n}{states}\PY{p}{,} \PY{n}{actions}\PY{p}{)}
+        \PY{n}{critic\PYZus{}loss} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}criterion}\PY{p}{(}\PY{n}{critic\PYZus{}value}\PY{p}{,} \PY{n}{target}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Update critic}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}optimizer}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+        \PY{n}{critic\PYZus{}loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}optimizer}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Compute actor loss}
+        \PY{n}{new\PYZus{}policy\PYZus{}actions} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor}\PY{p}{(}\PY{n}{states}\PY{p}{)}
+        \PY{n}{actor\PYZus{}loss} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic}\PY{p}{(}\PY{n}{states}\PY{p}{,} \PY{n}{new\PYZus{}policy\PYZus{}actions}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Update actor}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}optimizer}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+        \PY{n}{actor\PYZus{}loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}optimizer}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} update target networks}
+        \PY{k}{for} \PY{n}{target\PYZus{}param}\PY{p}{,} \PY{n}{param} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor\PYZus{}target}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{actor}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n}{target\PYZus{}param}\PY{o}{.}\PY{n}{data}\PY{o}{.}\PY{n}{copy\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tau}\PY{o}{*}\PY{n}{param}\PY{o}{.}\PY{n}{data} \PY{o}{+} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tau}\PY{p}{)}\PY{o}{*}\PY{n}{target\PYZus{}param}\PY{o}{.}\PY{n}{data}\PY{p}{)}
+
+        \PY{k}{for} \PY{n}{target\PYZus{}param}\PY{p}{,} \PY{n}{param} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic\PYZus{}target}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{critic}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n}{target\PYZus{}param}\PY{o}{.}\PY{n}{data}\PY{o}{.}\PY{n}{copy\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tau}\PY{o}{*}\PY{n}{param}\PY{o}{.}\PY{n}{data} \PY{o}{+} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{tau}\PY{p}{)}\PY{o}{*}\PY{n}{target\PYZus{}param}\PY{o}{.}\PY{n}{data}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \emph{Putting} it all together: DDPG in action.
+
+The main function below runs 50 episodes of DDPG on the ``Pendulum-v1''
+environment of OpenAI gym. This is the inverted pendulum swingup
+problem, a classic problem in the control literature. In this version of
+the problem, the pendulum starts in a random position, and the goal is
+to swing it up so it stays upright.
+
+Each episode is for a maximum of 500 timesteps. At each step, the agent
+chooses an action, updates its parameters according to the DDPG
+algorithm and moves to the next state, repeating this process till the
+end of the episode.
+
+The DDPG algorithm is as follows:
+
+\begin{figure}
+\centering
+\caption{ddpg.png}
+\end{figure}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{sys}
+\PY{k+kn}{import} \PY{n+nn}{gym}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{warnings}
+
+\PY{c+c1}{\PYZsh{} Filter out DeprecationWarnings and UserWarnings}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{UserWarning}\PY{p}{)}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{RuntimeWarning}\PY{p}{)}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ignore}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{category}\PY{o}{=}\PY{n+ne}{DeprecationWarning}\PY{p}{)}
+
+\PY{n}{env} \PY{o}{=} \PY{n}{NormalizedEnv}\PY{p}{(}\PY{n}{gym}\PY{o}{.}\PY{n}{make}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Pendulum\PYZhy{}v1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{agent} \PY{o}{=} \PY{n}{DDPGagent}\PY{p}{(}\PY{n}{env}\PY{p}{)}
+\PY{n}{noise} \PY{o}{=} \PY{n}{OUNoise}\PY{p}{(}\PY{n}{env}\PY{o}{.}\PY{n}{action\PYZus{}space}\PY{p}{)}
+\PY{n}{batch\PYZus{}size} \PY{o}{=} \PY{l+m+mi}{128}
+\PY{n}{rewards} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{avg\PYZus{}rewards} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+\PY{k}{for} \PY{n}{episode} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{50}\PY{p}{)}\PY{p}{:}
+    \PY{n}{state} \PY{o}{=} \PY{n}{env}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+    \PY{n}{noise}\PY{o}{.}\PY{n}{reset}\PY{p}{(}\PY{p}{)}
+    \PY{n}{episode\PYZus{}reward} \PY{o}{=} \PY{l+m+mi}{0}
+
+    \PY{k}{for} \PY{n}{step} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
+        \PY{n}{action} \PY{o}{=} \PY{n}{agent}\PY{o}{.}\PY{n}{get\PYZus{}action}\PY{p}{(}\PY{n}{state}\PY{p}{)}
+        \PY{c+c1}{\PYZsh{}Add noise to action}
+
+        \PY{n}{action} \PY{o}{=} \PY{n}{noise}\PY{o}{.}\PY{n}{get\PYZus{}action}\PY{p}{(}\PY{n}{action}\PY{p}{)}
+        \PY{n}{new\PYZus{}state}\PY{p}{,} \PY{n}{reward}\PY{p}{,} \PY{n}{done}\PY{p}{,} \PY{n}{info} \PY{o}{=} \PY{n}{env}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{n}{action}\PY{p}{)}
+        \PY{n}{agent}\PY{o}{.}\PY{n}{memory}\PY{o}{.}\PY{n}{push}\PY{p}{(}\PY{n}{state}\PY{p}{,} \PY{n}{action}\PY{p}{,} \PY{n}{reward}\PY{p}{,} \PY{n}{new\PYZus{}state}\PY{p}{,} \PY{n}{done}\PY{p}{)}
+
+        \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{agent}\PY{o}{.}\PY{n}{memory}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{n}{batch\PYZus{}size}\PY{p}{:}
+            \PY{n}{agent}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{n}{batch\PYZus{}size}\PY{p}{)}
+
+        \PY{n}{state} \PY{o}{=} \PY{n}{new\PYZus{}state}
+        \PY{n}{episode\PYZus{}reward} \PY{o}{+}\PY{o}{=} \PY{n}{reward}
+        \PY{k}{if} \PY{n}{done}\PY{p}{:}
+            \PY{n}{sys}\PY{o}{.}\PY{n}{stdout}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{episode: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{, reward: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{, average \PYZus{}reward: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{ }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{episode}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{episode\PYZus{}reward}\PY{p}{,} \PY{n}{decimals}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{rewards}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{10}\PY{p}{:}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+            \PY{k}{break}
+
+    \PY{n}{rewards}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{episode\PYZus{}reward}\PY{p}{)}
+    \PY{n}{avg\PYZus{}rewards}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{rewards}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{10}\PY{p}{:}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{rewards}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{avg\PYZus{}rewards}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Episode}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Reward}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+episode: 0, reward: -1433.55, average \_reward: nan
+episode: 1, reward: -1378.62, average \_reward: -1433.5491371472303
+episode: 2, reward: -1417.36, average \_reward: -1406.0868190000772
+episode: 3, reward: -1446.79, average \_reward: -1409.8455791568701
+episode: 4, reward: -818.98, average \_reward: -1419.0826129587515
+episode: 5, reward: -1378.18, average \_reward: -1299.0614254268453
+episode: 6, reward: -1115.06, average \_reward: -1312.2485974883555
+episode: 7, reward: -928.81, average \_reward: -1284.0787880980645
+episode: 8, reward: -1155.0, average \_reward: -1239.669740183666
+episode: 9, reward: -648.09, average \_reward: -1230.2624873828966
+episode: 10, reward: -620.99, average \_reward: -1172.0455172146476
+episode: 11, reward: -518.4, average \_reward: -1090.7899503651356
+episode: 12, reward: -612.73, average \_reward: -1004.7676993022081
+episode: 13, reward: -257.79, average \_reward: -924.3041074985997
+episode: 14, reward: -507.53, average \_reward: -805.403807236323
+episode: 15, reward: -246.76, average \_reward: -774.2591866688131
+episode: 16, reward: -388.71, average \_reward: -661.1165505662223
+episode: 17, reward: -609.87, average \_reward: -588.4818676518457
+episode: 18, reward: -606.54, average \_reward: -556.5885484662632
+episode: 19, reward: -741.74, average \_reward: -501.74230257269346
+episode: 20, reward: -646.92, average \_reward: -511.1068691104445
+episode: 21, reward: -380.66, average \_reward: -513.699697798609
+episode: 22, reward: -573.96, average \_reward: -499.9256188660029
+episode: 23, reward: -378.96, average \_reward: -496.0491658139026
+episode: 24, reward: -233.16, average \_reward: -508.16601638354206
+episode: 25, reward: -491.37, average \_reward: -480.7287659660548
+episode: 26, reward: -376.72, average \_reward: -505.18976254774554
+episode: 27, reward: -247.4, average \_reward: -503.99078063534887
+episode: 28, reward: -250.52, average \_reward: -467.7431337564356
+episode: 29, reward: -357.11, average \_reward: -432.1412335414563
+episode: 30, reward: -256.45, average \_reward: -393.6781597874789
+episode: 31, reward: -366.28, average \_reward: -354.6310050493379
+episode: 32, reward: -614.49, average \_reward: -353.1926470236044
+episode: 33, reward: -386.6, average \_reward: -357.2451859178408
+episode: 34, reward: -630.33, average \_reward: -358.00888643720447
+episode: 35, reward: -504.81, average \_reward: -397.7262862385197
+episode: 36, reward: -480.31, average \_reward: -399.0706014849168
+episode: 37, reward: -374.46, average \_reward: -409.42901649965756
+episode: 38, reward: -370.0, average \_reward: -422.1349370625576
+episode: 39, reward: -254.3, average \_reward: -434.08228598329634
+episode: 40, reward: -473.98, average \_reward: -423.8010586939014
+episode: 41, reward: -491.59, average \_reward: -445.553625660595
+episode: 42, reward: -494.02, average \_reward: -458.0848426339019
+episode: 43, reward: -493.06, average \_reward: -446.03806750354835
+episode: 44, reward: -371.46, average \_reward: -456.6848623062394
+episode: 45, reward: -496.47, average \_reward: -430.7976073232356
+episode: 46, reward: -502.04, average \_reward: -429.96329549073005
+episode: 47, reward: -359.5, average \_reward: -432.13646407307886
+episode: 48, reward: -252.44, average \_reward: -430.6411009329515
+episode: 49, reward: -273.07, average \_reward: -418.8853647038174
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{plot.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{tutorial-7-an-overview}{%
+\section{Tutorial 7: An Overview}\label{tutorial-7-an-overview}}
+
+This code implements a Deep Deterministic Policy Gradient (DDPG) agent
+for solving the Pendulum-v1 environment from the OpenAI Gym. Below are
+some inferences about the code:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Actor-Critic Architecture:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The agent implements an actor-critic architecture with separate neural
+  networks for the actor and the critic. The actor network is
+  responsible for learning the policy, while the critic network
+  evaluates the actions taken by the actor.
+\item
+  Both the actor and the critic networks consist of three fully
+  connected layers with ReLU activations. The actor outputs actions
+  after applying a hyperbolic tangent (tanh) activation to ensure
+  actions are within the valid range.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{Ornstein-Uhlenbeck Noise:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The OUNoise class implements Ornstein-Uhlenbeck noise, which is used
+  for exploration in continuous action spaces. This noise process adds
+  temporally correlated noise to the actions, helping exploration while
+  ensuring smoothness.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Memory Replay Buffer:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The Memory class implements a replay buffer to store experiences
+  (state, action, reward, next state, done) for experience replay. This
+  allows the agent to sample mini-batches of experiences randomly for
+  training, which stabilizes and accelerates learning.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  \textbf{Normalization of Actions:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The NormalizedEnv class wraps the action space of the environment. It
+  scales and shifts the actions to ensure they fall within a specific
+  range, typically {[}-1, 1{]}. This helps stabilize learning in cases
+  where the action space has varying bounds.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  \textbf{Training Loop:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The training loop iterates over a fixed number of episodes. Within
+  each episode, the agent interacts with the environment for a fixed
+  number of steps (500 steps in this case).
+\item
+  After each step, the agent stores the experience in its replay buffer
+  and updates its networks if the buffer contains enough experiences.
+\item
+  The loop tracks the cumulative reward obtained in each episode and
+  computes the average reward over the last 10 episodes.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  \textbf{Plotting and Output:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  After training, the code plots the rewards obtained in each episode as
+  well as the average rewards over the last 10 episodes. This provides
+  insight into the agent's learning progress.
+\item
+  The output shows the episode number, the total reward obtained in that
+  episode, and the average reward over the last 10 episodes.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{6}
+\tightlist
+\item
+  \textbf{Observations:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The training process seems to be making progress, as evidenced by the
+  decreasing trend in rewards over the episodes.
+\item
+  However, there might be room for improvement, as the rewards are still
+  negative, indicating suboptimal performance. Further tuning of
+  hyperparameters or network architectures may be necessary to achieve
+  better results.
+\end{itemize}
+
+Overall, the code effectively implements a DDPG agent for solving the
+Pendulum-v1 environment, utilizing actor-critic architecture,
+Ornstein-Uhlenbeck noise, and experience replay for efficient learning
+in continuous action spaces.
+
+    \hypertarget{network-sizes-and-hyperparameters}{%
+\section{Network Sizes and
+Hyperparameters}\label{network-sizes-and-hyperparameters}}
+
+Here's an overview of the network sizes and hyperparameters used in the
+provided code:
+
+\subsection{network-sizes}
+\label{network-sizes}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Actor Network:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Input Size: Determined by the number of state variables in the
+  environment.
+\item
+  Hidden Layer Size: 256 neurons for each of the two hidden layers.
+\item
+  Output Size: Determined by the number of action variables in the
+  environment.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{Critic Network:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \textit{Input Size:} Sum of the number of state variables and action variables
+  in the environment.
+\item
+  \textit{Hidden Layer Size:} 256 neurons for each of the two hidden layers.
+\item
+  \textit{Output Size:} Single output representing the estimated Q-value.
+\end{itemize}
+
+\subsection{Hyperparameters}
+\label{hyperparameters}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Actor Learning Rate:} \(10^{-4}\)
+\item
+  \textbf{Critic Learning Rate:} \(10^{-3}\)
+\item
+  \textbf{Discount Factor (\(\gamma\)):} 0.99 
+  
+  Gamma determines the importance of future rewards compared to immediate rewards. A value close to 1 indicates a high emphasis on future rewards.
+\item
+  \textbf{Soft Update Parameter (\(\tau\)):} \(10^{-2}\)
+  
+  
+  \(\tau\) determines the rate at which the target networks are updated towards the primary networks. A small value ensures a slow and smooth update of target networks.
+\item
+  \textbf{Maximum Memory Size:} 50000 
+  
+  
+  This determines the maximum size of the replay buffer, which stores past experiences for training the agent through experience replay.
+\item
+  \textbf{Ornstein-Uhlenbeck Process Parameters:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \textit{Mean or Average (\(\mu\)):} 0.0
+\item
+  \textit{Reversion rate (\(\theta\)):} 0.15
+\item
+  \textit{Maximum volatility in the noise amplitude (\(\sigma_{max}\)):}
+  0.3
+\item
+  \textit{Minimun volatility in the noise amplitude (\(\sigma_{min}\)):}
+  0.3
+\item
+  \textit{Duration of noise reduction (Decay Period):} 100000
+  
+  
+  These parameters control the behavior of the
+  Ornstein-Uhlenbeck noise process used for exploration.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{6}
+\tightlist
+\item
+  \textbf{Other Details:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The \textit{Adam optimizer} is used for both the actor and critic
+  networks with the specified learning rates.
+\item
+  The \textit{Mean Squared Error (MSE)} loss function is used for the
+  critic network.
+\item
+  The \textit{ReLU} activation function is used for hidden layers in
+  both actor and critic networks, with a \textit{hyperbolic tangent
+  (tanh)} activation function for the actor's output layer.
+\end{itemize}
+
+These network sizes and hyperparameters are common choices for DDPG
+agents and can provide a good starting point for solving continuous
+control tasks like the Pendulum-v1 environment. However, tuning these
+parameters based on specific task requirements and experimental
+observations may be necessary for optimal performance.
+
+    \hypertarget{inference}{%
+\section{Inference}\label{inference}}
+
+Looking at the plots of reward vs.~episode and average reward
+vs.~episode provides valuable insights into the learning progress of the
+DDPG agent. Here are some inferences we can draw from these plots:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Reward Progression:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The reward plot shows an upward trend over episodes, indicating that
+  the agent is learning to achieve higher rewards over time. This
+  suggests that the agent is making progress in learning to solve the
+  task.
+\item
+  Initially, the rewards is highly negative, indicating poor
+  performance. However, as training progresses, the rewards tend to
+  stabilize and improve, approaching a saturated negative value.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{Variance in Reward:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  There might be considerable variance in the rewards obtained across
+  episodes, as seen from the fluctuations in the reward plot. This
+  variability is expected during the learning process, especially in the
+  early stages when the agent's policy is still evolving.
+\item
+  Variability in rewards could arise due to stochasticity in the
+  environment, exploration-exploitation trade-offs, or the randomness
+  introduced by the Ornstein-Uhlenbeck noise during exploration.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Convergence:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The convergence of the reward plot towards zero or positive values
+  indicates that the agent is converging towards a better policy. This
+  convergence suggests that the agent is gradually learning to achieve
+  higher rewards and is getting closer to solving the task optimally.
+\item
+  However, it's essential to monitor the stability of this convergence.
+  Sudden spikes or drops in reward might indicate issues such as
+  instability in training or suboptimal learning rates.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  \textbf{Average Reward Trend:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The plot of average reward versus episode provides a smoothed view of
+  the agent's learning progress. The increasing trend in average reward
+  indicates consistent improvement in the agent's performance over time.
+\item
+  This upward trend suggests that the agent's learning process is
+  effective, as it is gradually learning to achieve higher rewards on
+  average. The smoothness of the curve indicates that the learning
+  process is stable and that the agent is making steady progress without
+  significant fluctuations.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  \textbf{Maxima in Average Reward:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  At episode 32, there is a peak in the average reward with its value
+  being -353.1926470236044, indicating that the agent achieved
+  its best performance up to that point during training.
+\item
+  This peak suggests that the agent's learning process was successful in
+  discovering a policy that yielded relatively high rewards compared to
+  earlier episodes.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  \textbf{Subsequent Oscillation:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Following the peak in average reward, there is a decrease in the
+  average reward in subsequent episodes followed by an increase.
+\item
+  The oscillation in average reward suggests that the agent's
+  performance has been saturated and the learned policy became became
+  effective in generating rewards with its mean about -400.
+\item
+  But, there is still a high variance in the actual reward suggesting
+  stochasticity in the learning.
+\end{itemize}
+
+Overall, the plots of reward versus episode and average reward versus
+episode serve as essential diagnostic tools for monitoring the training
+progress of the DDPG agent in solving the Pendulum-v1 environment. They
+provide insights into the agent's learning trajectory, convergence
+behavior, and overall performance trends, with the increasing and smooth
+trend in average rewards indicating effective learning and progress
+towards solving the task.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
